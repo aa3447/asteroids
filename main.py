@@ -33,13 +33,21 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return
+        
         screen.fill((0, 0, 0))
         updatable.update(delta_time)
+        
         for rock in asteroids:
             if rock.collides_with(current_player):
                 sys.exit("Game Over!")
+            for bullet in shots:
+                if rock.collides_with(bullet):
+                    rock.split()
+                    bullet.kill()
+        
         for sprite in drawable:
             sprite.draw(screen)
+        
         pygame.display.flip()
         delta_time = game_clock.tick(60)/1000
 
