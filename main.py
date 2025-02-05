@@ -11,6 +11,7 @@ def main():
     screen = pygame.display.set_mode((constants.SCREEN_WIDTH, constants.SCREEN_HEIGHT))
     game_clock = pygame.time.Clock()
     delta_time = 0
+    score = 0
    
     updatable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
@@ -32,6 +33,7 @@ def main():
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                print(f"Final score: {score}")
                 return
         
         screen.fill((0, 0, 0))
@@ -39,10 +41,12 @@ def main():
         
         for rock in asteroids:
             if rock.collides_with(current_player):
+                print(f"Final score: {score}")
                 sys.exit("Game Over!")
             for bullet in shots:
                 if rock.collides_with(bullet):
-                    rock.split()
+                    score += rock.split()
+                    print(f"Score: {score}")
                     bullet.kill()
         
         for sprite in drawable:
