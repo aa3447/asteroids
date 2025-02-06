@@ -28,6 +28,9 @@ class Player(circleshape.CircleShape):
         bullet = shot.Shot(self.position.x, self.position.y)
         bullet.velocity = pygame.Vector2(0, 1).rotate(self.rotation) * constants.PLAYER_SHOOT_SPEED
 
+    def set_position(self, x, y):
+        self.position = pygame.Vector2(x, y)
+
     def draw(self, screen):
         pygame.draw.polygon(screen, (255, 255, 255), self.triangle(), 2)
 

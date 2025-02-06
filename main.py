@@ -5,7 +5,6 @@ import player
 import asteroid
 import asteroidfield
 import shot
-import math
 import score
 
 def main():
@@ -14,6 +13,7 @@ def main():
     game_clock = pygame.time.Clock()
     delta_time = 0
     total_time = 0
+    lives = 3
    
     updatable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
@@ -27,7 +27,7 @@ def main():
     
     current_player = player.Player(constants.SCREEN_WIDTH/2, constants.SCREEN_HEIGHT/2)
     scoring = score.Score()
-    asteroidfield.AsteroidField()
+    current_field = asteroidfield.AsteroidField()
  
     print("Starting asteroids!")
     print(f"Screen width: {constants.SCREEN_WIDTH}")
@@ -47,14 +47,18 @@ def main():
         
         for rock in asteroids:
             if rock.collides_with(current_player):
-                scoring.add_time(total_time)
-                print(f"Time bonus: {scoring.get_time_bonus()}")
-                print(f"Final score: {scoring.get_score()}")
-                sys.exit("Game Over!")
+                lives -= 1
+                print(f"Lives: {lives}")
+                if lives <= 0:
+                    scoring.add_time(total_time)
+                    print(f"Time bonus: {scoring.get_time_bonus()}")
+                    print(f"Final score: {scoring.get_score()}")
+                    sys.exit("Game Over!")
+                current_player  = reset_game(drawable, asteroids, shots, updatable, current_field)
+                break
             for bullet in shots:
                 if rock.collides_with(bullet):
                     scoring.add_score(rock.split())
-                    #score += rock.split()
                     print(f"Score: {scoring.get_score()}")
                     bullet.kill()
         
@@ -63,6 +67,14 @@ def main():
         
         pygame.display.flip()
         delta_time = game_clock.tick(60)/1000
+
+def reset_game(drawable, asteroids, shots, updatable, current_field):
+    drawable.empty()
+    asteroids.empty()
+    shots.empty()
+    updatable.empty()
+    updatable.add(current_field)
+    return player.Player(constants.SCREEN_WIDTH/2, constants.SCREEN_HEIGHT/2)
 
 if __name__ == "__main__":
     main()
