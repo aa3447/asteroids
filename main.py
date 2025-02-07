@@ -61,10 +61,9 @@ def main():
                     scoring.add_score(rock.split())
                     print(f"Score: {scoring.get_score()}")
                     bullet.kill()
-        
+                    
         for sprite in drawable:
             sprite.draw(screen)
-        
         pygame.display.flip()
         delta_time = game_clock.tick(60)/1000
 
