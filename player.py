@@ -2,7 +2,6 @@ import pygame
 import circleshape
 import constants
 import shot
-import math
 
 class Player(circleshape.CircleShape):
     def __init__(self, x, y):
@@ -44,6 +43,9 @@ class Player(circleshape.CircleShape):
 
     def set_position(self, x, y):
         self.position = pygame.Vector2(x, y)
+    
+    def get_position(self):
+        return self.position
 
     def draw(self, screen):
         pygame.draw.polygon(screen, (255, 255, 255), self.triangle(), 2)
@@ -57,13 +59,13 @@ class Player(circleshape.CircleShape):
             self.rotate(dt)
         if keys[pygame.K_w] and not keys[pygame.K_s]:
             if self.current_speed < 0:
-                self.current_speed += constants.PLAYER_ACCELERATION * 2
+                self.current_speed += constants.PLAYER_ACCELERATION * constants.PLAYER_DEACCELERATION
             else:
                 self.current_speed += constants.PLAYER_ACCELERATION
             self.move(dt)
         if keys[pygame.K_s] and not keys[pygame.K_w]:
             if self.current_speed > 0:
-                self.current_speed -= constants.PLAYER_ACCELERATION * 2
+                self.current_speed -= constants.PLAYER_ACCELERATION * constants.PLAYER_DEACCELERATION
             else:
                 self.current_speed -= constants.PLAYER_ACCELERATION
             self.move(dt)

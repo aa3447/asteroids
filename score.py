@@ -1,4 +1,5 @@
 import math
+import constants
 
 class Score():
     def __init__(self):
@@ -12,12 +13,11 @@ class Score():
         self.score += points
 
     def get_score(self):
-        self.score += self.total_time * 100
-        self.score = math.ceil(self.score)
-        return self.score
+        temp_score = self.score
+        return math.ceil(temp_score + self.total_time * constants.SCORE_TIME_BONUS)
 
     def get_total_time(self):
         return self.total_time
 
     def get_time_bonus(self):
-        return math.ceil(self.total_time * 100)
+        return math.ceil(self.total_time * constants.SCORE_TIME_BONUS)

@@ -20,9 +20,16 @@ class Asteroid(circleshape.CircleShape):
         Asteroid(self.position.x, self.position.y, new_radius, new_score).velocity = split_angle_1 * 1.2
         Asteroid(self.position.x, self.position.y, new_radius, new_score).velocity = split_angle_2 * 1.2
         return self.score
-
+    
+    def get_position(self):
+        return self.position
+    
+    def set_position(self, x, y):
+        self.position = pygame.Vector2(x, y)
+    
     def draw(self, screen):
         pygame.draw.circle(screen, (255, 255, 255), self.position, self.radius, 2)
 
     def update(self, dt):
         self.position += self.velocity * dt
+
