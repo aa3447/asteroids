@@ -40,14 +40,19 @@ class Player(circleshape.CircleShape):
     def shoot(self):
         bullet = shot.Shot(self.position.x, self.position.y)
         bullet.velocity = pygame.Vector2(0, 1).rotate(self.rotation) * constants.PLAYER_SHOOT_SPEED
-
-    def set_position(self, x, y):
-        self.position = pygame.Vector2(x, y)
     
-    def get_position(self):
-        return self.position
+    def check_screen_wrap(self):
+        if self.position.x < 0:
+            self.set_position(constants.SCREEN_WIDTH, self.position.y)
+        elif self.position.x > constants.SCREEN_WIDTH:
+            self.set_position(0, self.position.y)
+        elif self.position.y < 0:
+            self.set_position(self.position.x, constants.SCREEN_HEIGHT)
+        elif self.position.y > constants.SCREEN_HEIGHT:
+            self.set_position(self.position.x, 0)
 
     def draw(self, screen):
+        self.check_screen_wrap() 
         pygame.draw.polygon(screen, (255, 255, 255), self.triangle(), 2)
 
     def update(self, dt):

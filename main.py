@@ -55,32 +55,12 @@ def main():
                     sys.exit("Game Over!")
                 current_player  = reset_game(drawable, asteroids, shots, updatable, current_field)
                 break
-            
-            rock_position = rock.get_position()
-            if rock_position.x < -constants.ASTEROID_MAX_RADIUS:
-                rock.set_position(constants.SCREEN_WIDTH, rock_position.y)
-            elif rock_position.x > constants.SCREEN_WIDTH:
-                rock.set_position(0, rock_position.y)
-            elif rock_position.y < -constants.ASTEROID_MAX_RADIUS:
-                rock.set_position(rock_position.x, constants.SCREEN_HEIGHT)
-            elif rock_position.y > constants.SCREEN_HEIGHT:
-                rock.set_position(rock_position.x, 0)
 
             for bullet in shots:
                 if rock.collides_with(bullet):
                     scoring.add_score(rock.split())
                     print(f"Score: {scoring.get_score()}")
                     bullet.kill()
-        
-        current_position = current_player.get_position()
-        if current_position.x < 0:
-            current_player.set_position(constants.SCREEN_WIDTH, current_position.y)
-        elif current_position.x > constants.SCREEN_WIDTH:
-            current_player.set_position(0, current_position.y)
-        elif current_position.y < 0:
-            current_player.set_position(current_position.x, constants.SCREEN_HEIGHT)
-        elif current_position.y > constants.SCREEN_HEIGHT:
-            current_player.set_position(current_position.x, 0)
 
         for sprite in drawable:
             sprite.draw(screen)

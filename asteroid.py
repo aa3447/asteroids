@@ -20,14 +20,21 @@ class Asteroid(circleshape.CircleShape):
         Asteroid(self.position.x, self.position.y, new_radius, new_score).velocity = split_angle_1 * 1.2
         Asteroid(self.position.x, self.position.y, new_radius, new_score).velocity = split_angle_2 * 1.2
         return self.score
-    
-    def get_position(self):
-        return self.position
-    
-    def set_position(self, x, y):
-        self.position = pygame.Vector2(x, y)
+
+    def check_screen_wrap(self):
+        if self.position.x < -constants.ASTEROID_MAX_RADIUS:
+            self.set_position(constants.SCREEN_WIDTH, self.position.y)
+        elif self.position.x > constants.SCREEN_WIDTH:
+            self.set_position(0, self.position.y)
+        elif self.position.y < -constants.ASTEROID_MAX_RADIUS:
+            self.set_position(self.position.x, constants.SCREEN_HEIGHT)
+        elif self.position.y > constants.SCREEN_HEIGHT:
+            self.set_position(self.position.x, 0)
     
     def draw(self, screen):
+        
+        self.check_screen_wrap()
+        
         pygame.draw.circle(screen, (255, 255, 255), self.position, self.radius, 2)
 
     def update(self, dt):
