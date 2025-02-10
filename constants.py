@@ -14,7 +14,11 @@ PLAYER_DEACCELERATION = 2  # pixels per second^2
 PLAYER_TURN_SPEED = 300  # degrees per second
 PLAYER_SHOOT_SPEED = 500  # pixels per second
 PLAYER_SHOOT_COOLDOWN = 0.3  # seconds
+PLAYER_LIVES = 3
+
 
 SHOT_RADIUS = 5
 
 SCORE_TIME_BONUS = 100  # points per second
+
+EXTRA_LIFE_SCORE = 20000  # points

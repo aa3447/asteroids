@@ -6,13 +6,13 @@ import asteroid
 import asteroidfield
 import shot
 import score
+import lives
 
 def main():
     pygame.init()
     screen = pygame.display.set_mode((constants.SCREEN_WIDTH, constants.SCREEN_HEIGHT))
     game_clock = pygame.time.Clock()
     delta_time = 0
-    lives = 3
    
     updatable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
@@ -27,6 +27,7 @@ def main():
     current_player = player.Player(constants.SCREEN_WIDTH/2, constants.SCREEN_HEIGHT/2)
     scoring = score.Score()
     current_field = asteroidfield.AsteroidField()
+    player_lives = lives.Lives()
  
     print("Starting asteroids!")
     print(f"Screen width: {constants.SCREEN_WIDTH}")
@@ -43,13 +44,14 @@ def main():
         screen.fill((0, 0, 0))
         updatable.update(delta_time)
 
+        # TODO: add to updatable group
         current_field.set_asteroid_count(len(asteroids.sprites()))
+        player_lives.score_extra_life(scoring.get_score())
         
         for rock in asteroids:
             if rock.collides_with(current_player):
-                lives -= 1
-                print(f"Lives: {lives}")
-                if lives <= 0:
+                player_lives.lose_life()
+                if not player_lives.is_alive():
                     print(f"Time bonus: {scoring.get_time_bonus()}")
                     print(f"Final score: {scoring.get_score()}")
                     sys.exit("Game Over!")

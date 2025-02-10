@@ -31,10 +31,8 @@ class Asteroid(circleshape.CircleShape):
         elif self.position.y > constants.SCREEN_HEIGHT:
             self.set_position(self.position.x, 0)
     
-    def draw(self, screen):
-        
-        self.check_screen_wrap()
-        
+    def draw(self, screen):     
+        self.check_screen_wrap()  
         pygame.draw.circle(screen, (255, 255, 255), self.position, self.radius, 2)
 
     def update(self, dt):

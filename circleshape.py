@@ -1,5 +1,4 @@
 import pygame
-import constants
 
 # Base class for game objects
 class CircleShape(pygame.sprite.Sprite):
@@ -19,10 +18,6 @@ class CircleShape(pygame.sprite.Sprite):
     
     def set_position(self, x, y):
         self.position = pygame.Vector2(x, y)
-
-    def check_screen_wrap(self):
-         # sub-classes must override
-        pass
     
     def collides_with(self, other):
         return self.position.distance_to(other.position) <= self.radius + other.radius
