@@ -10,6 +10,8 @@ class Player(circleshape.CircleShape):
         self.shot_timer = 0
         self.current_speed = 0
         self.shield = False
+        self.speed_boost = 1
+        self.speed_boost_timer = 0
 
     def set_shield(self, bool):
         if bool:
@@ -20,6 +22,16 @@ class Player(circleshape.CircleShape):
 
     def get_shield(self):
         return self.shield
+    
+    def set_speed_boost(self,value):
+        print("Speeeed Booooost!!")
+        self.speed_boost = value
+    
+    def get_speed_boost(self):
+        return self.speed_boost
+    
+    def set_speed_boost_timer(self , value):
+        self.speed_boost_timer = value
 
     def triangle(self):
         forward = pygame.Vector2(0, 1).rotate(self.rotation)
@@ -34,19 +46,22 @@ class Player(circleshape.CircleShape):
 
     def move(self, dt):
         forward = pygame.Vector2(0, 1).rotate(self.rotation)
-        if self.current_speed > constants.PLAYER_MAX_SPEED:
-            self.current_speed = constants.PLAYER_MAX_SPEED
-        if self.current_speed < -constants.PLAYER_MAX_SPEED:
-            self.current_speed = -constants.PLAYER_MAX_SPEED
+        adjusted_max_speed = constants.PLAYER_MAX_SPEED * self.speed_boost
+        if self.current_speed > adjusted_max_speed:
+            self.current_speed = adjusted_max_speed
+        if self.current_speed < -adjusted_max_speed:
+            self.current_speed = -adjusted_max_speed
+        
         self.position += forward * self.current_speed * dt
     
     def momentum(self, dt):
         forward = pygame.Vector2(0, 1).rotate(self.rotation)
         self.position += forward * self.current_speed * dt
+        adjusted_acceleration = constants.PLAYER_ACCELERATION * self.speed_boost
         if self.current_speed > 0:
-            self.current_speed -= constants.PLAYER_ACCELERATION
+            self.current_speed -= adjusted_acceleration
         else:
-            self.current_speed += constants.PLAYER_ACCELERATION
+            self.current_speed += adjusted_acceleration
 
     def shoot(self):
         bullet = shot.Shot(self.position.x, self.position.y)
@@ -69,21 +84,30 @@ class Player(circleshape.CircleShape):
     def update(self, dt):
         keys = pygame.key.get_pressed()
 
+        if self.speed_boost > 1:
+            self.speed_boost_timer -= dt
+            print(self.speed_boost_timer)
+            if self.speed_boost_timer <= 0:
+                self.speed_boost = 1
+                print("Speed Boost Over!")
+                
         if keys[pygame.K_a]:
             self.rotate(-dt)
         if keys[pygame.K_d]:
             self.rotate(dt)
         if keys[pygame.K_w] and not keys[pygame.K_s]:
+            adjusted_acceleration = constants.PLAYER_ACCELERATION * self.speed_boost
             if self.current_speed < 0:
-                self.current_speed += constants.PLAYER_ACCELERATION * constants.PLAYER_DEACCELERATION
+                self.current_speed += adjusted_acceleration * constants.PLAYER_DEACCELERATION
             else:
-                self.current_speed += constants.PLAYER_ACCELERATION
+                self.current_speed += adjusted_acceleration
             self.move(dt)
         if keys[pygame.K_s] and not keys[pygame.K_w]:
+            adjusted_acceleration = constants.PLAYER_ACCELERATION * self.speed_boost
             if self.current_speed > 0:
-                self.current_speed -= constants.PLAYER_ACCELERATION * constants.PLAYER_DEACCELERATION
+                self.current_speed -= adjusted_acceleration * constants.PLAYER_DEACCELERATION
             else:
-                self.current_speed -= constants.PLAYER_ACCELERATION
+                self.current_speed -= adjusted_acceleration
             self.move(dt)
         if keys[pygame.K_SPACE]:
             self.shot_timer -= dt

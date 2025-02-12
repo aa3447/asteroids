@@ -75,8 +75,8 @@ def main():
                     print(f"Score: {scoring.get_score()}")
                     bullet.kill()
 
-            for pup in powerups:
-                if pup.collides_with(current_player):
+            for pup in powerups:            
+                if pup.collides_with(current_player) and not (current_player.get_shield() and pup.get_power_name() == "shield"):
                     pup.apply_powerup(current_player, player_lives)
                     pup.kill()
 
