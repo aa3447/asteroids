@@ -7,10 +7,12 @@ class Lives():
 
     def add_life(self):
         self.lives += 1
+        print("Live Gained!")
         print(f"Lives: {self.lives}")
 
     def lose_life(self):
         self.lives -= 1
+        print("Live Lost!")
         print(f"Lives: {self.lives}")
 
     def score_extra_life(self, score):

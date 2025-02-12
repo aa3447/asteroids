@@ -9,6 +9,17 @@ class Player(circleshape.CircleShape):
         self.rotation = 0
         self.shot_timer = 0
         self.current_speed = 0
+        self.shield = False
+
+    def set_shield(self, bool):
+        if bool:
+            print("Shield Gained!")
+        else:
+            print("Shield Lost!")
+        self.shield = bool
+
+    def get_shield(self):
+        return self.shield
 
     def triangle(self):
         forward = pygame.Vector2(0, 1).rotate(self.rotation)
