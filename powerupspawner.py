@@ -4,7 +4,7 @@ import random
 import powerup
 
 class PowerUpSpawner(pygame.sprite.Sprite):
-    __powerups = [("extra_life" , [0,255,0]), ("shield" , [0,226,225]),("speed_boost", [255,251,0])]
+    __powerups = [("extra_life" , [0,255,0]), ("shield" , [0,226,225]),("speed_boost", [255,251,0]),("spread_shot" , [245, 186, 8])]
 
     def __init__(self):
         pygame.sprite.Sprite.__init__(self, self.containers)

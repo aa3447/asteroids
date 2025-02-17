@@ -10,8 +10,10 @@ class Player(circleshape.CircleShape):
         self.shot_timer = 0
         self.current_speed = 0
         self.shield = False
+        self.spread_shot_bool = False
         self.speed_boost = 1
         self.speed_boost_timer = 0
+        self.spread_timer = 0
 
     def set_shield(self, bool):
         if bool:
@@ -32,6 +34,13 @@ class Player(circleshape.CircleShape):
     
     def set_speed_boost_timer(self , value):
         self.speed_boost_timer = value
+    
+    def set_spread_shot(self, bool):
+        print("Spread Shot!")
+        self.spread_shot_bool = bool
+    
+    def set_spread_shot_timer(self , value):
+        self.spread_timer = value
 
     def triangle(self):
         forward = pygame.Vector2(0, 1).rotate(self.rotation)
@@ -63,10 +72,15 @@ class Player(circleshape.CircleShape):
         else:
             self.current_speed += adjusted_acceleration
 
-    def shoot(self):
+    def shoot(self, rotaton_offset = 0):
         bullet = shot.Shot(self.position.x, self.position.y)
-        bullet.velocity = pygame.Vector2(0, 1).rotate(self.rotation) * constants.PLAYER_SHOOT_SPEED
+        bullet.velocity = pygame.Vector2(0, 1).rotate(self.rotation + rotaton_offset) * constants.PLAYER_SHOOT_SPEED
     
+    def spread_shot(self):
+        self.shoot()
+        self.shoot(constants.SHOT_SPREAD_AMOUNT)
+        self.shoot(-constants.SHOT_SPREAD_AMOUNT)
+
     def check_screen_wrap(self):
         if self.position.x < 0:
             self.set_position(constants.SCREEN_WIDTH, self.position.y)
@@ -86,15 +100,22 @@ class Player(circleshape.CircleShape):
 
         if self.speed_boost > 1:
             self.speed_boost_timer -= dt
-            print(self.speed_boost_timer)
             if self.speed_boost_timer <= 0:
                 self.speed_boost = 1
                 print("Speed Boost Over!")
+        
+        if self.spread_shot_bool:
+            if self.spread_timer >= 0:
+                self.spread_timer -= dt
+            else:
+                print("Spead Shot Lost!")
+                self.spread_shot_bool = False
                 
         if keys[pygame.K_a]:
             self.rotate(-dt)
         if keys[pygame.K_d]:
             self.rotate(dt)
+        
         if keys[pygame.K_w] and not keys[pygame.K_s]:
             adjusted_acceleration = constants.PLAYER_ACCELERATION * self.speed_boost
             if self.current_speed < 0:
@@ -102,6 +123,7 @@ class Player(circleshape.CircleShape):
             else:
                 self.current_speed += adjusted_acceleration
             self.move(dt)
+        
         if keys[pygame.K_s] and not keys[pygame.K_w]:
             adjusted_acceleration = constants.PLAYER_ACCELERATION * self.speed_boost
             if self.current_speed > 0:
@@ -109,10 +131,15 @@ class Player(circleshape.CircleShape):
             else:
                 self.current_speed -= adjusted_acceleration
             self.move(dt)
+        
         if keys[pygame.K_SPACE]:
             self.shot_timer -= dt
             if self.shot_timer <= 0:
-                self.shoot()
+                if self.spread_shot_bool:
+                    self.spread_shot()
+                else:
+                    self.shoot()
                 self.shot_timer = constants.PLAYER_SHOOT_COOLDOWN
+        
         if not (keys[pygame.K_w] or keys[pygame.K_s]):
             self.momentum(dt)

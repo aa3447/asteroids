@@ -16,6 +16,9 @@ class PowerUp(circleshape.CircleShape):
         elif self.type == "speed_boost":
             player.set_speed_boost(constants.POWERUP_SPEED_BOOST)
             player.set_speed_boost_timer(constants.POWERUP_SPEED_BOOST_TIMER)
+        elif self.type == "spread_shot":
+            player.set_spread_shot(True)
+            player.set_spread_shot_timer(constants.POWERUP_SPREAD_TIMER)
 
     def get_power_name(self):
         return self.type
